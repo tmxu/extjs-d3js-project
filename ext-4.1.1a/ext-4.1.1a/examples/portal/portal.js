@@ -239,7 +239,71 @@ Ext.define('Ext.app.Portal', {
                 }
             }]
         });
-    
+        
+        // data for bar chart
+        var chart3 = Ext.create('Ext.chart.Chart', {
+            id: 'chartCmp3',
+            xtype: 'chart',
+            animate: true,
+            shadow: true,
+            store: store1,
+            legend: {
+                position: 'bottom'
+            },
+            axes: [{
+                type: 'Numeric',
+                position: 'bottom',
+                fields: ['data1'],
+                label: {
+                    renderer: Ext.util.Format.numberRenderer('0,0')
+                },
+                title: 'Number of Hits',
+                grid: true,
+                minimum: 0
+            }, {
+                type: 'Category',
+                position: 'left',
+                fields: ['name'],
+                title: 'Month of the Year'
+            }],
+            background: {
+              gradient: {
+                id: 'backgroundGradient',
+                angle: 45,
+                stops: {
+                  0: {
+                    color: '#ffffff'
+                  },
+                  100: {
+                    color: '#eaf1f8'
+                  }
+                }
+              }
+            },
+            series: [{
+                type: 'bar',
+                axis: 'bottom',
+                highlight: true,
+                tips: {
+                  trackMouse: true,
+                  width: 140,
+                  height: 28,
+                  renderer: function(storeItem, item) {
+                    this.setTitle(storeItem.get('name') + ': ' + storeItem.get('data1') + ' views');
+                  }
+                },
+                label: {
+                  display: 'insideEnd',
+                    field: 'data1',
+                    renderer: Ext.util.Format.numberRenderer('0'),
+                    orientation: 'horizontal',
+                    color: '#333',
+                  'text-anchor': 'middle'
+                },
+                xField: 'name',
+                yField: ['data1']
+            }]
+        });    
 
         Ext.apply(this, {
             id: 'app-viewport',
@@ -353,7 +417,7 @@ Ext.define('Ext.app.Portal', {
                     	}
                     },{
                     	id: 'col-3',
-                    	items: {
+                    	items: [{
                     		id: 'portlet-3',
                     		title: 'Area',
                     		tools: this.getTools(),
@@ -364,7 +428,17 @@ Ext.define('Ext.app.Portal', {
                     		listeners: {
                     			'close': Ext.bind(this.onPortletClose, this)
                     		}
-                    }
+                        },{
+                            id: 'portlet-4',
+                            title: 'Bar',
+                            tools: this.getTools(),
+                            height: 400,
+                            layout: 'fit',
+                            items: chart3,
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        }]
                     }]
                 }
                 ]
