@@ -98,6 +98,7 @@ Ext.define('Ext.app.PortalDropZone', {
 
         pos = (match && overPortlet ? pos : overColumn.items.getCount()) + (overSelf ? -1 : 0);
         var overEvent = this.createEvent(dd, e, data, colIndex, overColumn, pos);
+
         if (portal.fireEvent('validatedrop', overEvent) !== false && portal.fireEvent('beforedragover', overEvent) !== false) {
 
             // make sure proxy width is fluid in different width columns
@@ -112,6 +113,7 @@ Ext.define('Ext.app.PortalDropZone', {
                 var flag = Ext.ComponentQuery.is(barchart,'chart');
                 //barchart.series.yField ='data2';
                 //barchart.redraw();
+                
                 var newSeries = {
                     type: 'bar',
                     axis: 'bottom',
@@ -119,9 +121,57 @@ Ext.define('Ext.app.PortalDropZone', {
                     xField: 'name',
                     yField: 'data2'
                 };
-                barchart.series.clear();
+
+                var temp = dd.id;
+                var temp1 = overPortlet.id;
+                var sourcechart, dropchart;
+
+
+
+
+                //var portalpanel = Ext.ComponentQuery.query('portalpanel[id="app-portal"]');
+                //var portalpanel = portal.items.get(1).items.get(1);
+                var portalpanel = Ext.getCmp('app-portal');
+
+                
+
+                for(var i=0; i<portalpanel.items.length;i++) {
+
+                    
+
+                    if(portalpanel.items.get(i).id=='col-1'||portalpanel.items.get(i).id=='col-3') {
+
+                        for(var j=0;j<portalpanel.items.get(i).items.length;j++) {
+                            if(portalpanel.items.get(i).items.get(j).id==temp) 
+                                sourcechart = portalpanel.items.get(i).items.get(j).items.get(0);
+                            if(portalpanel.items.get(i).items.get(j).id==temp1) 
+                                dropchart = portalpanel.items.get(i).items.get(j).items.get(0);
+                        }
+                        //if(portalpanel.items.get(i).)
+                    }
+                    
+                }
+
+
+                //var tempid = sourcechart.getItemId();
+                //var config = { 
+                //    title:'提示', 
+                //    msg: tempid
+                //    } 
+                //Ext.Msg.show(config);
+                
+                
+                
+
                 barchart.series.add(newSeries);
+
                 barchart.redraw();
+
+                
+                
+                //barchart.setAttributes({
+                //    style: 'background:#000',
+                //},true);
             } else {
                 dd.panelProxy.moveProxy(overColumn.el.dom, null);
             }
