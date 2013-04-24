@@ -253,7 +253,7 @@ Ext.define('Ext.app.Portal', {
             axes: [{
                 type: 'Numeric',
                 position: 'bottom',
-                fields: ['data1'],
+                fields: ['data1','data2'],
                 label: {
                     renderer: Ext.util.Format.numberRenderer('0,0')
                 },

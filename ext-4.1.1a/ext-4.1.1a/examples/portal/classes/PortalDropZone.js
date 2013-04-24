@@ -98,13 +98,30 @@ Ext.define('Ext.app.PortalDropZone', {
 
         pos = (match && overPortlet ? pos : overColumn.items.getCount()) + (overSelf ? -1 : 0);
         var overEvent = this.createEvent(dd, e, data, colIndex, overColumn, pos);
-
         if (portal.fireEvent('validatedrop', overEvent) !== false && portal.fireEvent('beforedragover', overEvent) !== false) {
 
             // make sure proxy width is fluid in different width columns
             proxy.getProxy().setWidth('auto');
             if (overPortlet) {
-                dd.panelProxy.moveProxy(overPortlet.el.dom.parentNode, match ? overPortlet.el.dom : null);
+                // deleted by tmxu to avoid moving the target chart
+                //dd.panelProxy.moveProxy(overPortlet.el.dom.parentNode, match ? overPortlet.el.dom : null);
+                //overPortlet.el.setAttributes
+                var charts = Ext.ComponentQuery.query('chart[id="chartCmp3"]');
+                //var nme = barchart.getName();
+                var barchart = charts[0];
+                var flag = Ext.ComponentQuery.is(barchart,'chart');
+                //barchart.series.yField ='data2';
+                //barchart.redraw();
+                var newSeries = {
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    xField: 'name',
+                    yField: 'data2'
+                };
+                barchart.series.clear();
+                barchart.series.add(newSeries);
+                barchart.redraw();
             } else {
                 dd.panelProxy.moveProxy(overColumn.el.dom, null);
             }
@@ -150,7 +167,8 @@ Ext.define('Ext.app.PortalDropZone', {
             dd.proxy.hide();
 
             if (pos !== false) {
-                c.insert(pos, panel);
+                // delete by tmxu to avoid modifying the layout
+                //c.insert(pos, panel);
             } else {
                 c.add(panel);
             }
