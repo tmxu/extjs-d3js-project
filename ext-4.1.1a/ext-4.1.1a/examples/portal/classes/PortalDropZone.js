@@ -114,13 +114,7 @@ Ext.define('Ext.app.PortalDropZone', {
                 //barchart.series.yField ='data2';
                 //barchart.redraw();
                 
-                var newSeries = {
-                    type: 'bar',
-                    axis: 'bottom',
-                    highlight: true,
-                    xField: 'name',
-                    yField: 'data2'
-                };
+                
 
                 var temp = dd.id;
                 var temp1 = overPortlet.id;
@@ -152,6 +146,52 @@ Ext.define('Ext.app.PortalDropZone', {
                     
                 }
 
+                for(var i=0;i<dropchart.series.length;i++) {
+                    var surface = dropchart.surface;
+
+                    for(var groupKey = 0; groupKey < surface.groups.keys.length; groupKey++) {
+                        // destroy the group
+                        surface.groups.items[groupKey].destroy();
+                    }
+
+                    dropchart.series.remove(dropchart.series.items[i]);
+                }
+
+                for(var i=0;i<sourcechart.series.length;i++) {
+                    var newSeries = {
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    xField: sourcechart.series.get(i).xField,
+                    yField: sourcechart.series.get(i).yField,
+                    };
+                    dropchart.series.add(newSeries);
+                }
+                /*
+                var newSeries = {
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    xField: sourcechart.series.get(1).xField,
+                    yField: sourcechart.series.get(1).yField,
+                };
+                dropchart.series.add(newSeries);*/
+                //dropchart.series.get(0).yField = sourcechart.series.get(1).yField;
+
+                //var tempid = sourcechart.getItemId();
+                var config = { 
+                    title:'提示', 
+                    msg: 'a'
+                    } 
+                //Ext.Msg.show(config);
+
+                //dropchart.series.get(0).xField = sourcechart.series.get(1).xField;
+
+
+                dropchart.refresh();
+                dropchart.redraw();
+                //barchart.redraw();
+
 
                 //var tempid = sourcechart.getItemId();
                 //var config = { 
@@ -163,9 +203,9 @@ Ext.define('Ext.app.PortalDropZone', {
                 
                 
 
-                barchart.series.add(newSeries);
+                
 
-                barchart.redraw();
+                //barchart.redraw();
 
                 
                 
