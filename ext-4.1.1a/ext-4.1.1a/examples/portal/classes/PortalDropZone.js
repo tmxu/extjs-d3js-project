@@ -114,15 +114,9 @@ Ext.define('Ext.app.PortalDropZone', {
                 //barchart.series.yField ='data2';
                 //barchart.redraw();
                 
-                
-
                 var temp = dd.id;
                 var temp1 = overPortlet.id;
                 var sourcechart, dropchart;
-
-
-
-
                 //var portalpanel = Ext.ComponentQuery.query('portalpanel[id="app-portal"]');
                 //var portalpanel = portal.items.get(1).items.get(1);
                 var portalpanel = Ext.getCmp('app-portal');
@@ -130,9 +124,6 @@ Ext.define('Ext.app.PortalDropZone', {
                 
 
                 for(var i=0; i<portalpanel.items.length;i++) {
-
-                    
-
                     if(portalpanel.items.get(i).id=='col-1'||portalpanel.items.get(i).id=='col-3') {
 
                         for(var j=0;j<portalpanel.items.get(i).items.length;j++) {
@@ -141,77 +132,40 @@ Ext.define('Ext.app.PortalDropZone', {
                             if(portalpanel.items.get(i).items.get(j).id==temp1) 
                                 dropchart = portalpanel.items.get(i).items.get(j).items.get(0);
                         }
-                        //if(portalpanel.items.get(i).)
                     }
                     
                 }
+                var success = { 
+                    title:'提示', 
+                    msg: '数据迁移成功！'
+                    } 
+                if(dropchart.series.get(0).type =='bar')
+                {
+                    for(var i=0;i<dropchart.series.length;i++) {
+                        var surface = dropchart.surface;
 
-                for(var i=0;i<dropchart.series.length;i++) {
-                    var surface = dropchart.surface;
+                        for(var groupKey = 0; groupKey < surface.groups.keys.length; groupKey++) {
+                            // destroy the group
+                            surface.groups.items[groupKey].destroy();
+                        }
 
-                    for(var groupKey = 0; groupKey < surface.groups.keys.length; groupKey++) {
-                        // destroy the group
-                        surface.groups.items[groupKey].destroy();
+                        dropchart.series.remove(dropchart.series.items[i]);
                     }
 
-                    dropchart.series.remove(dropchart.series.items[i]);
+                    for(var i=0;i<sourcechart.series.length;i++) {
+                        var newSeries = {
+                            type: 'bar',
+                            axis: 'bottom',
+                            highlight: true,
+                            xField: sourcechart.series.get(i).xField,
+                            yField: sourcechart.series.get(i).yField,
+                        };
+                        dropchart.series.add(newSeries);
+                    }
+                    dropchart.refresh();
+                    dropchart.redraw();
+                    Ext.Msg.show(success);
                 }
-
-                for(var i=0;i<sourcechart.series.length;i++) {
-                    var newSeries = {
-                    type: 'bar',
-                    axis: 'bottom',
-                    highlight: true,
-                    xField: sourcechart.series.get(i).xField,
-                    yField: sourcechart.series.get(i).yField,
-                    };
-                    dropchart.series.add(newSeries);
-                }
-                /*
-                var newSeries = {
-                    type: 'bar',
-                    axis: 'bottom',
-                    highlight: true,
-                    xField: sourcechart.series.get(1).xField,
-                    yField: sourcechart.series.get(1).yField,
-                };
-                dropchart.series.add(newSeries);*/
-                //dropchart.series.get(0).yField = sourcechart.series.get(1).yField;
-
-                //var tempid = sourcechart.getItemId();
-                var config = { 
-                    title:'提示', 
-                    msg: 'a'
-                    } 
-                //Ext.Msg.show(config);
-
-                //dropchart.series.get(0).xField = sourcechart.series.get(1).xField;
-
-
-                dropchart.refresh();
-                dropchart.redraw();
-                //barchart.redraw();
-
-
-                //var tempid = sourcechart.getItemId();
-                //var config = { 
-                //    title:'提示', 
-                //    msg: tempid
-                //    } 
-                //Ext.Msg.show(config);
-                
-                
-                
-
-                
-
-                //barchart.redraw();
-
-                
-                
-                //barchart.setAttributes({
-                //    style: 'background:#000',
-                //},true);
             } else {
                 dd.panelProxy.moveProxy(overColumn.el.dom, null);
             }
